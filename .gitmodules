@@ -1,0 +1,3 @@
+[submodule "forms-server"]
+	path = forms-server
+	url = git@github.com:Pardeg/forms-server.git

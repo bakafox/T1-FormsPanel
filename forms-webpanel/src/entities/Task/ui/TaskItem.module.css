@@ -1,0 +1,52 @@
+.taskitem {
+    border-left-width: 4px;
+
+    &.high {
+        border-left-color: #fa541c;
+    }
+    &.medium {
+        border-left-color: #ffec3d;
+    }
+    &.low {
+        border-left-color: #d3adf7;
+    }
+}
+
+.taskitem-title, .taskitem-text {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    line-clamp: 2; -webkit-line-clamp: 2;
+    white-space: wrap;
+    overflow: hidden;
+    margin: 8px 0;
+
+    @media (width <= 640px) {
+        line-clamp: 3; -webkit-line-clamp: 3;
+    }
+}
+.taskitem-text {
+    margin-top: 0px;
+
+    &.empty {
+        display: none;
+    }
+}
+
+.taskitem-footer {
+    display: flex;
+    justify-content: space-between; align-items: baseline;
+}
+.taskitem-footer__actions {
+    display: flex; flex-direction: row;
+    gap: 8px;
+    opacity: 0;
+    transition: opacity .3s; 
+
+    .taskitem:hover &, &:focus-within {
+        opacity: 1;
+    }
+
+    @media (pointer:none), (pointer:coarse) {
+        display: none; /* Не показываем на мобилках вообще! */
+    }
+}

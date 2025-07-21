@@ -1,0 +1,12 @@
+.btnsSection {
+    display: flex; flex-direction: row;
+    gap: 8px;
+    
+    & [class~=ant-form-item] {
+        flex: 1;
+    }
+}
+
+[class~=ant-form-item-required]::before {
+    display: none !important;
+}
