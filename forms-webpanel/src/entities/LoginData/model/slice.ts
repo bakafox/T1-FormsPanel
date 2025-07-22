@@ -1,4 +1,4 @@
-import type { LoginData, LoginResData } from './types'
+import type { LoginData, LoginResData, LoginMyData } from './types'
 
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
@@ -46,39 +46,45 @@ const logout = createAsyncThunk(
     },
 )
 
-const getMyUserData = createAsyncThunk(
+const getMyData = createAsyncThunk(
     'login/me',
-    async (): Promise<LoginResData> => {
+    async (): Promise<LoginMyData> => {
         const json = await fetch(
             `${API_ROOT}/me`,
         )
 
         if (!json.ok) { throw new Error(json.toString()) }
 
-        const data: LoginResData = await json.json()
+        const data: LoginMyData = await json.json()
         return data
     },
 )
 
 // Теперь все наши Thunk-и оборачиваем в особые редюсеры, которые
 // можут иметь доступ к действия, произошедшим не внутри слайса
+interface LoginState {
+    myData: LoginMyData,
+}
+const loginInitialState: LoginState = {
+    myData: {} as LoginMyData,
+}
+
 const usersSlice = createSlice({
     name: 'users',
 
-    initialState: {}, // <-- Нам ничё хранить не нужно, поэтому вот так
+    initialState: loginInitialState,
 
     reducers: {},
 
     extraReducers(builder) {
         builder
-            .addCase(login.rejected, (state, action) => {
-                alert(action.error?.message || 'Произошла чудовищная ошибка!')
+            .addCase(getMyData.fulfilled, (state, action) => {
+                state.myData = action.payload
             })
-            .addCase(logout.rejected, (state, action) => {
-                alert(action.error?.message || 'Произошла чудовищная ошибка!')
-            })
-            .addCase(getMyUserData.rejected, (state, action) => {
-                alert(action.error?.message || 'Произошла чудовищная ошибка!')
+            .addCase(getMyData.rejected, (state, action) => {
+                if (action.error.code === '401') {
+                    state.myData = {} as LoginMyData
+                }
             })
     },
 })
@@ -88,7 +94,7 @@ const usersSlice = createSlice({
 // их наблюдает, и, когда они выполняются, делает определённые
 // действия со значенинем внутри слайса.
 export {
-    getMyUserData,
+    getMyData,
     login,
     logout,
 }

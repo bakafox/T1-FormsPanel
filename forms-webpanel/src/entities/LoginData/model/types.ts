@@ -6,3 +6,10 @@ export interface LoginData {
 export interface LoginResData {
     message?: string,
 }
+
+export interface LoginMyData {
+    sub: string,
+    email: string,
+    iat: number,
+    exp: number,
+}

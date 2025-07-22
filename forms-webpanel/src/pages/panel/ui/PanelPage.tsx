@@ -1,5 +1,5 @@
-import type { AppDispatch } from '@app/store'
-import type { LoginData } from '@entities/LoginData/model/types'
+import type { AppDispatch, RootState } from '@app/store'
+import { getUsers } from '@entities/UserData/model/slice'
 import Layout from '@shared/ui/layout/Layout'
 
 import React, { useEffect, useState } from 'react'
@@ -11,15 +11,9 @@ const PanelPage: React.FC = () => {
     const navigate = useNavigate()
     const dispatch: AppDispatch = useDispatch()
 
-    const [getLoginData, setLoginData] = useState<LoginData>({} as LoginData)
-
     useEffect(() => {
-        if (getLoginData.email && getLoginData.password) {
-            console.log(getLoginData)
-            // dispatch(createTask({ task: getNewTask }))
-            // navigate('/')
-        }
-    }, [getLoginData])
+        dispatch(getUsers())
+    }, [])
 
     return (
         <Layout>

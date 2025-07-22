@@ -7,7 +7,6 @@ import path from 'path'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-// https://vite.dev/config/
 export default defineConfig({
   resolve: {
     alias: {
@@ -22,5 +21,18 @@ export default defineConfig({
   },
   plugins: [
     react(), tsconfigPaths()
-  ]
+  ],
+  // Для работы нужно в .env поменять VITE_API_ROOT на "/api/v1/"
+  server: {
+    allowedHosts: ['localhost'],
+    port: 5173,
+    proxy: {
+      '/api': {
+        changeOrigin: true,
+        secure: false,
+        target: 'http://localhost:4000',
+      },
+    },
+    strictPort: true,
+  },
 })

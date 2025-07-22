@@ -21,6 +21,12 @@
 
 .users-list {
     display: flex; flex-direction: column;
-    gap: 8px;
-    padding: 0 8px;    
+    height: 100%;
+    gap: 8px; padding: 0 8px;
+    /* overflow: clip; */
+}
+
+.hidden {
+    display: none !important;
+    background-color: red;
 }

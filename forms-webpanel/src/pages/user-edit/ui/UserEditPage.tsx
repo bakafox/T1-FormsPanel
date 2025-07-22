@@ -18,7 +18,7 @@ const UserEditPage: React.FC = () => {
     const [getUserData, setUserData] = useState<UserData>({} as UserData)
 
     useEffect(() => {
-        if (!searchParams.get('id')) {
+        if (!searchParams.get('uid')) {
             navigate('/')
         }
     }, [])

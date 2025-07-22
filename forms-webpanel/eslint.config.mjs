@@ -7,7 +7,7 @@ export default antfu(
             'package.json',
             'package-lock.json',
             'tsconfig*',
-            '*.config.js',
+            '*.config.*s',
         ],
 
         type: 'lib',

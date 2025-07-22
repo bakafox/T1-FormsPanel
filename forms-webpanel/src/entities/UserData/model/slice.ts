@@ -10,14 +10,31 @@ const API_ROOT = import.meta.env.VITE_API_ROOT + 'users'
 
 const getUsers = createAsyncThunk(
     'users/getUsers',
-    async (): Promise<UserData[]> => {
+    async (): Promise<UserResData[]> => {
         const json = await fetch(
             API_ROOT,
         )
 
         if (!json.ok) { throw new Error(json.toString()) }
 
-        const data: UserData[] = await json.json()
+        const data: UserResData[] = await json.json()
+        return data
+    },
+)
+
+const getUser = createAsyncThunk(
+    'users/getUser',
+    async (
+        { uid, setAsMyUser = false }: { uid: UserResData['id'], setAsMyUser: boolean },
+    ): Promise<UserResData> => {
+        const json = await fetch(
+            `${API_ROOT}/${uid}`,
+        )
+
+        if (!json.ok) { throw new Error(json.toString()) }
+
+        const data: UserResData = await json.json()
+
         return data
     },
 )
@@ -83,10 +100,12 @@ const deleteUser = createAsyncThunk(
 // Теперь все наши Thunk-и оборачиваем в особые редюсеры, которые
 // можут иметь доступ к действия, произошедшим не внутри слайса
 interface UsersState {
-    value: UserData[],
+    allUsers: UserResData[],
+    myUser: UserResData
 }
 const usersInitialState: UsersState = {
-    value: [],
+    allUsers: [],
+    myUser: {} as UserResData
 }
 
 const usersSlice = createSlice({
@@ -98,29 +117,29 @@ const usersSlice = createSlice({
 
     extraReducers(builder) {
         builder
-            .addCase(getUsers.fulfilled, (state, action) => {
-                console.log(state, action)
+            .addCase(getUser.fulfilled, (state, action) => {
+                if (action.meta.arg.setAsMyUser) {
+                    state.myUser = action.payload
+                }
             })
-            .addCase(getUsers.rejected, (state, action) => {
-                alert(action.error?.message || 'Произошла чудовищная ошибка!')
+            .addCase(getUsers.fulfilled, (state, action) => {
+                state.allUsers = action.payload
             })
             .addCase(createUser.fulfilled, (state, action) => {
-                console.log(state, action)
-            })
-            .addCase(createUser.rejected, (state, action) => {
-                alert(action.error?.message || 'Произошла чудовищная ошибка!')
+                const newUser = { ...action.meta.arg.ud, ...action.payload }
+                state.allUsers.push(newUser)
             })
             .addCase(updateUser.fulfilled, (state, action) => {
-                console.log(state, action)
-            })
-            .addCase(updateUser.rejected, (state, action) => {
-                alert(action.error?.message || 'Произошла чудовищная ошибка!')
+                state.allUsers = state.allUsers.map(
+                    (user) => user.id === action.payload.id
+                        ? action.payload
+                        : user
+                )
             })
             .addCase(deleteUser.fulfilled, (state, action) => {
-                console.log(state, action)
-            })
-            .addCase(deleteUser.rejected, (state, action) => {
-                alert(action.error?.message || 'Произошла чудовищная ошибка!')
+                state.allUsers = state.allUsers.filter(
+                    (user) => user.id !== action.meta.arg.uid
+                )
             })
     },
 })
@@ -133,6 +152,7 @@ export {
     createUser,
     deleteUser,
     getUsers,
+    getUser,
     updateUser,
 }
 
