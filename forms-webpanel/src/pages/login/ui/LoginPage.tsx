@@ -1,12 +1,13 @@
 import type { AppDispatch } from '@app/store'
+import { login } from '@entities/LoginData/model/slice'
 import type { LoginData } from '@entities/LoginData/model/types'
+import styles from '@shared/ui/FormPage.module.css'
 import LoginForm from '@widgets/login-form/ui/LoginForm'
 
 import { Card, Typography } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router'
-import styles from '@shared/ui/FormPage.module.css'
+import { redirect, useNavigate } from 'react-router'
 
 const LoginPage: React.FC = () => {
     const navigate = useNavigate()
@@ -15,10 +16,13 @@ const LoginPage: React.FC = () => {
     const [getLoginData, setLoginData] = useState<LoginData>({} as LoginData)
 
     useEffect(() => {
+        async function doTheLogin() {
+            const res = await dispatch(login({ ld: getLoginData }))
+            if (res.meta.requestStatus !== 'rejected') { navigate('/') }
+        }
+
         if (getLoginData.email && getLoginData.password) {
-            console.log(getLoginData)
-            // dispatch(createTask({ task: getNewTask }))
-            // navigate('/')
+            doTheLogin()
         }
     }, [getLoginData])
 

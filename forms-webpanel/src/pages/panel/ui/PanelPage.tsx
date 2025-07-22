@@ -1,11 +1,11 @@
 import type { AppDispatch } from '@app/store'
 import type { LoginData } from '@entities/LoginData/model/types'
+import Layout from '@shared/ui/layout/Layout'
 
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router'
 import styles from './PanelPage.module.css'
-import Layout from '@shared/ui/layout/Layout'
 
 const PanelPage: React.FC = () => {
     const navigate = useNavigate()

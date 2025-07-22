@@ -1,7 +1,7 @@
 import LoginPage from '@pages/login/ui/LoginPage'
-import UserNewPage from '@pages/user-new/ui/UserNewPage'
-import UserEditPage from '@pages/user-edit/ui/UserEditPage'
 import PanelPage from '@pages/panel/ui/PanelPage'
+import UserEditPage from '@pages/user-edit/ui/UserEditPage'
+import UserNewPage from '@pages/user-new/ui/UserNewPage'
 
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'

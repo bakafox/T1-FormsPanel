@@ -17,9 +17,9 @@ const createUserData: (formUd: FormUserData) => UserData = (formUd) => {
     return {
         name: formUd.name,
         surName: formUd.surName,
-        fullName: `${formUd.name} ${formUd.surName}`,
+        fullName: formUd.surName ? `${formUd.name} ${formUd.surName}` : undefined,
         birthDate: formUd.birthDate,
-        employment: formUd.employment || '',
+        employment: formUd.employment,
         telephone: formUd.telephone.toString(),
         email: formUd.email,
         password: formUd.password,
@@ -46,11 +46,8 @@ const UserForm: React.FC<Props> = ({ getUserData, setUserData }) => {
 
                 <Form.Item
                     name="surName"
-                    rules={[
-                        { required: true, message: 'Укажите фамилию' },
-                    ]}
                 >
-                    <Input variant="filled" placeholder="Фамилия" />
+                    <Input variant="filled" placeholder="Фамилия (необязательно)" />
                 </Form.Item>
             </section>
 

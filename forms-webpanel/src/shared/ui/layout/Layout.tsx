@@ -22,13 +22,13 @@ const PageLayout: React.FC<PropsWithChildren> = ({ children }) => {
             <Layout style={{ backgroundColor: 'transparent' }}>
                 <Sider width={240} style={{ backgroundColor: 'transparent' }}>
                     <div className={styles['users-list']}>
-                        <Typography.Text type='secondary'>
-                            Всего пользователей: 000
-                        </Typography.Text>
-
                         <Button type='dashed' icon={<PlusCircleOutlined />} onClick={() => navigate('/user/create')}>
                             Новый пользователь
                         </Button>
+
+                        <Typography.Text type='secondary'>
+                            Всего пользователей: 000
+                        </Typography.Text>
                     </div>
                 </Sider>
 

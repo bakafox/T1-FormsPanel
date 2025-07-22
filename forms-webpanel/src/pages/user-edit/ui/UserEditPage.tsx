@@ -1,14 +1,14 @@
 import type { AppDispatch } from '@app/store'
 import type { UserData } from '@entities/UserData/model/types'
+import styles from '@shared/ui/FormPage.module.css'
+import Layout from '@shared/ui/layout/Layout'
 import UserForm from '@widgets/user-form/ui/UserForm'
 
 import { Card, Typography } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { useSearchParams } from 'react-router-dom'
 import { useNavigate } from 'react-router'
-import styles from '@shared/ui/FormPage.module.css'
-import Layout from '@shared/ui/layout/Layout'
+import { useSearchParams } from 'react-router-dom'
 
 const UserEditPage: React.FC = () => {
     const navigate = useNavigate()
