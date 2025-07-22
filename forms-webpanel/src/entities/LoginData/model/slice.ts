@@ -1,4 +1,4 @@
-import type { Task } from '@entities/Task/model/types'
+import type { Task } from '@entities/UserData/model/types'
 
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 

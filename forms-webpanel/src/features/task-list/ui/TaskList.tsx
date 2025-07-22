@@ -1,7 +1,7 @@
 import type { AppDispatch } from '@app/store'
-import type { Task } from '@entities/Task/model/types'
-import { deleteTask } from '@entities/Task/model/tasksSlice'
-import TaskItem from '@entities/Task/ui/TaskItem'
+import type { Task } from '@entities/UserData/model/types'
+import { deleteTask } from '@entities/UserData/model/slice'
+import TaskItem from '@entities/UserData/ui/TaskItem'
 
 import { Divider, Typography } from 'antd'
 import React from 'react'

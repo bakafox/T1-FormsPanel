@@ -1,4 +1,4 @@
-import type { UserData } from '@widgets/user-form/model/types'
+import type { UserData } from '@entities/UserData/model/types'
 import { LockOutlined, MailOutlined, PhoneOutlined } from '@ant-design/icons'
 import { Button, Checkbox, DatePicker, Divider, Form, Input } from 'antd'
 import React, { useState } from 'react'
@@ -28,15 +28,13 @@ const createUserData: (formUd: FormUserData) => UserData = (formUd) => {
 }
 
 const UserForm: React.FC<Props> = ({ getUserData, setUserData }) => {
-    const [getPhone, setPhone] = useState<number>(0)
-
     return (
         <Form
             name="userForm"
             initialValues={{ ...getUserData }}
             onFinish={(formUd: FormUserData) => setUserData(createUserData(formUd))}
         >
-            <section className={styles.nameSection}>
+            <section className={styles.rowSection}>
                 <Form.Item
                     name="name"
                     rules={[
@@ -80,7 +78,9 @@ const UserForm: React.FC<Props> = ({ getUserData, setUserData }) => {
                     { required: true, message: 'Вы забыли указать номер телефона' },
                     () => ({
                         validator(rule, value) {
+                            // https://gist.github.com/fearrr/b38b5a63740657300c5e3e1816a762ac
                             const phoneRegex = /^((\+7)[\- ]?)?\(?\d{3}\)?[\- ]?\d{1}[\- ]?\d{1}[\- ]?\d{1}[\- ]?\d{1}[\- ]?\d{1}(([\- ]?\d{1})?[\- ]?\d{1})?$/
+
                             if (!value || phoneRegex.test(value)) {
                                 return Promise.resolve()
                             }
@@ -139,11 +139,11 @@ const UserForm: React.FC<Props> = ({ getUserData, setUserData }) => {
                 name="userAgreement"
                 valuePropName="checked"
                 rules={[
-                    {
-                        validator: (_, value) => (
+                    () => ({
+                        validator: (rule, value) => (
                             value ? Promise.resolve() : Promise.reject(new Error('Вы не можете не согласиться…'))
                         ),
-                    },
+                    }),
                 ]}
             >
                 <Checkbox>
@@ -152,11 +152,10 @@ const UserForm: React.FC<Props> = ({ getUserData, setUserData }) => {
             </Form.Item>
 
             <Form.Item>
-                <section className={styles.btnsSection}>
+                <section className={styles.rowSection}>
                     <Button block onClick={() => setUserData({ userAgreement: false } as UserData)}>
                         Отмена
                     </Button>
-
                     <Button block type="primary" htmlType="submit">
                         Создать пользователя
                     </Button>

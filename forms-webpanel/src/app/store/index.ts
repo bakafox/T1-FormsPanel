@@ -1,4 +1,4 @@
-import tasksReducer from '@entities/Task/model/tasksSlice'
+import tasksReducer from '@entities/UserData/model/slice'
 
 import { configureStore } from '@reduxjs/toolkit'
 

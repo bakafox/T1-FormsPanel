@@ -1,14 +1,13 @@
 import type { AppDispatch } from '@app/store'
 import type { LoginData } from '@entities/LoginData/model/types'
-import LoginForm from '@widgets/login-form/ui/LoginForm'
 
-import { Card, Typography } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router'
-import styles from '@shared/ui/FormPage.module.css'
+import styles from './PanelPage.module.css'
+import Layout from '@shared/ui/layout/Layout'
 
-const LoginPage: React.FC = () => {
+const PanelPage: React.FC = () => {
     const navigate = useNavigate()
     const dispatch: AppDispatch = useDispatch()
 
@@ -23,16 +22,12 @@ const LoginPage: React.FC = () => {
     }, [getLoginData])
 
     return (
-        <main className={`${styles['form-wrap']} ${styles.centered}`}>
-            <Card className={styles['form-card']} style={{ maxWidth: '600px' }}>
-                <header className={styles.header}>
-                    <Typography.Title level={1}>Вход в систему</Typography.Title>
-                </header>
-
-                <LoginForm getLoginData={getLoginData} setLoginData={setLoginData} />
-            </Card>
-        </main>
+        <Layout>
+            <main className={styles['panel-wrap']}>
+                fgsfds
+            </main>
+        </Layout>
     )
 }
 
-export default LoginPage
+export default PanelPage

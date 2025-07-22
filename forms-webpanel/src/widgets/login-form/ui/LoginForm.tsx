@@ -1,8 +1,8 @@
-import type { LoginData } from '@widgets/login-form/model/types'
+import type { LoginData } from '@entities/LoginData/model/types'
 import { LockOutlined, MailOutlined } from '@ant-design/icons'
 import { Button, Form, Input } from 'antd'
 import React from 'react'
-import './LoginForm.module.css'
+import styles from './LoginForm.module.css'
 
 interface Props {
     getLoginData: LoginData,

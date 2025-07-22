@@ -5,15 +5,23 @@ import UserForm from '@widgets/user-form/ui/UserForm'
 import { Card, Typography } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
+import { useSearchParams } from 'react-router-dom'
 import { useNavigate } from 'react-router'
 import styles from '@shared/ui/FormPage.module.css'
 import Layout from '@shared/ui/layout/Layout'
 
-const UserNewPage: React.FC = () => {
+const UserEditPage: React.FC = () => {
     const navigate = useNavigate()
     const dispatch: AppDispatch = useDispatch()
+    const [searchParams, setSearchParams] = useSearchParams()
 
     const [getUserData, setUserData] = useState<UserData>({} as UserData)
+
+    useEffect(() => {
+        if (!searchParams.get('id')) {
+            navigate('/')
+        }
+    }, [])
 
     useEffect(() => {
         if (getUserData.userAgreement) {
@@ -31,7 +39,7 @@ const UserNewPage: React.FC = () => {
         <Layout>
             <main className={styles['form-wrap']}>
                 <header className={styles.header}>
-                    <Typography.Title level={2}>Создание нового пользователя</Typography.Title>
+                    <Typography.Title level={2}>Редактирование пользователя</Typography.Title>
                 </header>
 
                 <Card className={styles['form-card']} style={{ maxWidth: '800px' }}>
@@ -42,4 +50,4 @@ const UserNewPage: React.FC = () => {
     )
 }
 
-export default UserNewPage
+export default UserEditPage

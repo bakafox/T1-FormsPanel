@@ -1,0 +1,26 @@
+.layout-wrap {
+    display: flex; flex-direction: column;
+    max-width: 100%; height: 100%;
+}
+
+[class~=ant-layout-header] {
+    padding: 0 20px;
+    display: flex; flex-direction: row;
+    justify-content: space-between; align-items: center;
+}
+.logo {
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+.logout:not(:hover) {
+    color: #666;
+    border-color: #BBB;
+    background-color: transparent;
+    box-shadow: none;
+}
+
+.users-list {
+    display: flex; flex-direction: column;
+    gap: 8px;
+    padding: 0 8px;    
+}

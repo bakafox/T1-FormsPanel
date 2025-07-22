@@ -1,5 +1,6 @@
 import App from '@app/App.tsx'
 import { store } from '@app/store'
+import './main.css'
 
 import { StrictMode } from 'react'
 
