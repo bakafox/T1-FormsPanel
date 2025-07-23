@@ -13,7 +13,7 @@ const getUsers = createAsyncThunk(
     async (): Promise<UserResData[]> => {
         const json = await fetch(
             API_ROOT,
-            { credentials: 'include', },
+            { credentials: 'include' },
         )
 
         if (!json.ok) { throw new Error(json.toString()) }
@@ -30,7 +30,7 @@ const getUser = createAsyncThunk(
     ): Promise<UserResData> => {
         const res = await fetch(
             `${API_ROOT}/${uid}`,
-            { credentials: 'include', },
+            { credentials: 'include' },
         )
 
         if (!setAsMyUser) { setAsMyUser = false }
@@ -73,7 +73,7 @@ const createUser = createAsyncThunk(
 const updateUser = createAsyncThunk(
     'users/updateUser',
     async (
-        { uid, ud  }: { uid: UserResData['id'], ud: UserData },
+        { uid, ud }: { uid: UserResData['id'], ud: UserData },
     ): Promise<void> => {
         const res = await fetch(
             `${API_ROOT}/${uid}`,
@@ -89,8 +89,6 @@ const updateUser = createAsyncThunk(
             const data = await res.json()
             throw new Error(data.message)
         }
-
-        return
     },
 )
 
@@ -146,14 +144,18 @@ const usersSlice = createSlice({
                 const newUser = {
                     ...action.meta.arg.ud,
                     birthDate: action.meta.arg.ud.birthDate.toString(),
-                    ...action.payload
+                    ...action.payload,
                 }
                 state.allUsers.push(newUser)
             })
             .addCase(updateUser.fulfilled, (state, action) => {
                 state.allUsers = state.allUsers.map(
                     (ud: UserResData) => ud.id === action.meta.arg.uid
-                        ? action.meta.arg.ud
+                        ? {
+                                ...action.meta.arg.ud,
+                                birthDate: action.meta.arg.ud.birthDate.toString(),
+                                id: action.meta.arg.uid,
+                            }
                         : ud,
                 )
             })

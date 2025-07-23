@@ -53,7 +53,7 @@ const getMyData = createAsyncThunk(
     async (): Promise<LoginMyData> => {
         const json = await fetch(
             `${API_ROOT}/me`,
-            { credentials: 'include', }
+            { credentials: 'include' },
         )
 
         if (!json.ok) { throw new Error(json.toString()) }

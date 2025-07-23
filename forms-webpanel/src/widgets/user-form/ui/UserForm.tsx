@@ -1,10 +1,11 @@
 import type { UserData, UserResData } from '@entities/UserData/model/types'
 import type { FormStatus } from '../model/types'
+
 import { LockOutlined, MailOutlined, PhoneOutlined } from '@ant-design/icons'
 import { Button, Checkbox, DatePicker, Divider, Form, Input } from 'antd'
+import dayjs from 'dayjs'
 import React from 'react'
 import styles from './UserForm.module.css'
-import dayjs from 'dayjs'
 
 interface Props {
     getUserResData?: UserResData,
@@ -17,7 +18,8 @@ interface FormUserData extends Omit<UserData, 'fullName'> {
 }
 
 const createUserData: (
-    formUd: FormUserData, birthDateAsString?: boolean
+    formUd: FormUserData,
+    birthDateAsString?: boolean
 ) => UserData = (formUd) => {
     return {
         name: formUd.name,
@@ -42,12 +44,12 @@ const UserForm: React.FC<Props> = ({ getUserResData, setUserData, setStatus }) =
                 ...getUserResData,
                 // Ant Design использует dayjs для парсинга дат:
                 birthDate: getUserResData?.birthDate
-                            ? dayjs(getUserResData?.birthDate)
-                            : undefined,
+                    ? dayjs(getUserResData?.birthDate)
+                    : undefined,
             }}
             onFinish={(formUd: FormUserData) => {
                 setUserData(
-                    createUserData(formUd, isUserEditMode)
+                    createUserData(formUd, isUserEditMode),
                 ); setStatus('finished')
             }}
         >
@@ -200,29 +202,28 @@ const UserForm: React.FC<Props> = ({ getUserResData, setUserData, setStatus }) =
             <Form.Item>
                 {!isUserEditMode
                     ? (
-                        <section className={styles.rowSection}>
-                            <Button block onClick={() => setStatus('cancelled')}>
-                                Отмена
-                            </Button>
-                            <Button block type="primary" htmlType="submit">
-                                Создать пользователя
-                            </Button>
-                        </section>
-                    )
+                            <section className={styles.rowSection}>
+                                <Button block onClick={() => setStatus('cancelled')}>
+                                    Отмена
+                                </Button>
+                                <Button block type="primary" htmlType="submit">
+                                    Создать пользователя
+                                </Button>
+                            </section>
+                        )
                     : (
-                        <section className={styles.rowSection}>
-                            <Button block danger onClick={() => setStatus('deleted')}>
-                                Удалить
-                            </Button>
-                            <Button block onClick={() => setStatus('cancelled')}>
-                                Отмена
-                            </Button>
-                            <Button block type="primary" htmlType="submit">
-                                Сохранить
-                            </Button>
-                        </section>
-                    )
-                }
+                            <section className={styles.rowSection}>
+                                <Button block danger onClick={() => setStatus('deleted')}>
+                                    Удалить
+                                </Button>
+                                <Button block onClick={() => setStatus('cancelled')}>
+                                    Отмена
+                                </Button>
+                                <Button block type="primary" htmlType="submit">
+                                    Сохранить
+                                </Button>
+                            </section>
+                        )}
             </Form.Item>
         </Form>
     )

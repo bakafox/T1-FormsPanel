@@ -23,7 +23,7 @@ const UserNewPage: React.FC = () => {
             const res = await dispatch(createUser({ ud: getUserData }))
             if (res.meta.requestStatus === 'rejected') {
                 const err = res as { error: Error }
-                alert('Ошибка создания пользователя: \n' + err.error.message)
+                alert(`Ошибка создания пользователя: \n${err.error.message}`)
 
                 setStatus('pending')
             }

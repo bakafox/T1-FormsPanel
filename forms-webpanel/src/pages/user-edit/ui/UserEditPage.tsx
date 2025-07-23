@@ -1,10 +1,10 @@
 import type { AppDispatch, RootState } from '@app/store'
 import type { UserData, UserResData } from '@entities/UserData/model/types'
+import type { FormStatus } from '@widgets/user-form/model/types'
 import { deleteUser, getUser, updateUser } from '@entities/UserData/model/slice'
 import styles from '@shared/ui/FormPage.module.css'
 import Layout from '@shared/ui/layout/Layout'
 import UserForm from '@widgets/user-form/ui/UserForm'
-import type { FormStatus } from '@widgets/user-form/model/types'
 
 import { Card, Typography } from 'antd'
 import React, { useEffect, useState } from 'react'
@@ -37,7 +37,6 @@ const UserEditPage: React.FC = () => {
             if (res.meta.requestStatus === 'rejected') { navigate('/') }
 
             const ud = res.payload as UserResData
-
             setUserResData(ud)
         }
 
@@ -51,7 +50,7 @@ const UserEditPage: React.FC = () => {
             const res = await dispatch(updateUser({ uid: userId, ud: getUserData }))
             if (res.meta.requestStatus === 'rejected') {
                 const err = res as { error: Error }
-                alert('Ошибка обновления пользователя: \n' + err.error.message)
+                alert(`Ошибка обновления пользователя: \n${err.error.message}`)
 
                 setStatus('pending')
             }
@@ -62,15 +61,14 @@ const UserEditPage: React.FC = () => {
 
         async function checkUserDeletion(): Promise<void> {
             if (myUserData.id === userId) {
-                alert('Пожалуйста, не удаляйте самого себя!!! Этот мир прекраснее, когда в нём есть вы!')
+                alert('Пожалуйста, не удаляйте себя!!! Этот мир прекраснее, когда в нём есть вы!')
                 setStatus('pending')
             }
             else {
                 const res = await dispatch(deleteUser({ uid: userId }))
                 if (res.meta.requestStatus === 'rejected') {
                     const err = res as { error: Error }
-                    alert('Ошибка удаления пользователя: \n' + err.error.message)
-    
+                    alert(`Ошибка удаления пользователя: \n${err.error.message}`)
                     setStatus('pending')
                 }
                 else {
@@ -102,18 +100,17 @@ const UserEditPage: React.FC = () => {
                 <Card className={styles['form-card']} style={{ maxWidth: '800px' }}>
                     {Object.keys(getUserResData).length
                         ? (
-                            <UserForm
-                                getUserResData={getUserResData}
-                                setUserData={setUserData}
-                                setStatus={setStatus}
-                            />
-                        )
+                                <UserForm
+                                    getUserResData={getUserResData}
+                                    setUserData={setUserData}
+                                    setStatus={setStatus}
+                                />
+                            )
                         : (
-                            <Typography.Text italic>
-                                Загрузка…<br /><br />
-                            </Typography.Text>
-                        )
-                    }
+                                <Typography.Text italic>
+                                    Загрузка…<br /><br />
+                                </Typography.Text>
+                            )}
                 </Card>
             </main>
         </Layout>
