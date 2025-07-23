@@ -139,7 +139,11 @@ const usersSlice = createSlice({
                 state.allUsers = action.payload
             })
             .addCase(createUser.fulfilled, (state, action) => {
-                const newUser = { ...action.meta.arg.ud, ...action.payload }
+                const newUser = {
+                    ...action.meta.arg.ud,
+                    birthDate: action.meta.arg.ud.birthDate.toString(),
+                    ...action.payload
+                }
                 state.allUsers.push(newUser)
             })
             .addCase(updateUser.fulfilled, (state, action) => {

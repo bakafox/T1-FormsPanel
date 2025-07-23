@@ -2,7 +2,7 @@ export interface UserData {
     name: string,
     surName?: string,
     fullName?: string,
-    birthDate: Date | string,
+    birthDate: Date,
     employment?: string,
     email: string,
     telephone: string,
