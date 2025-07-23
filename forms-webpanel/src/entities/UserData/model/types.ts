@@ -2,7 +2,7 @@ export interface UserData {
     name: string,
     surName?: string,
     fullName?: string,
-    birthDate: Date,
+    birthDate: Date | string,
     employment?: string,
     email: string,
     telephone: string,
@@ -15,7 +15,7 @@ export interface UserResData extends Omit<
     'password' | 'birthDate' | 'telephone' | 'userAgreement'
 > {
     id: string,
-    birthDate?: Date,
+    birthDate?: string,
     telephone?: string,
     userAgreement?: boolean,
 }

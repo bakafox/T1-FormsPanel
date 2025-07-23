@@ -1,18 +1,23 @@
-import React, { useState } from 'react'
 import type { UserResData } from '../model/types'
-import { Card, Typography } from 'antd'
 import { MailOutlined, PhoneOutlined } from '@ant-design/icons'
+import { Card, Typography } from 'antd'
+import React from 'react'
 import styles from './UserItem.module.css'
 
 interface Props {
     ud: UserResData,
-    onClicked: () => void
+    onClicked: () => void,
 }
 
 const UserItem: React.FC<Props> = ({ ud, onClicked }) => {
     return (
-        <Card hoverable size='small' className={styles['user-item']} tabIndex={0}
-            onKeyDown={(e) => (e.code === 'Enter') ? onClicked() : ''} onClick={onClicked}
+        <Card
+            hoverable
+            className={styles['user-item']}
+            size="small"
+            tabIndex={0}
+            onKeyDown={e => (e.code === 'Enter') ? onClicked() : ''}
+            onClick={onClicked}
         >
             <div className={styles['user-item__inner']}>
                 <Typography.Text strong>
@@ -22,7 +27,7 @@ const UserItem: React.FC<Props> = ({ ud, onClicked }) => {
                     <PhoneOutlined /> { ud.telephone || '(не указан)'}
                 </Typography.Text>
                 <Typography.Text>
-                    <MailOutlined /> { ud.email }
+                    <MailOutlined /> { ud.email || '(не указан)'}
                 </Typography.Text>
             </div>
         </Card>

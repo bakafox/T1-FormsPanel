@@ -1,17 +1,18 @@
 import type { AppDispatch, RootState } from '@app/store'
-import type { UserResData } from '@entities/UserData/model/types'
 import type { LoginMyData } from '@entities/LoginData/model/types'
-import { getMyData, logout } from '@entities/LoginData/model/slice'
-import { getUser, updateUser } from '@entities/UserData/model/slice'
-
+import type { UserResData } from '@entities/UserData/model/types'
 import type { PropsWithChildren } from 'react'
+
 import { LogoutOutlined, PlusCircleOutlined } from '@ant-design/icons'
+import { getMyData, logout } from '@entities/LoginData/model/slice'
+import { getUser, getUsers } from '@entities/UserData/model/slice'
+import UserItem from '@entities/UserData/ui/UserItem'
+
 import { Button, Layout, Typography } from 'antd'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import styles from './Layout.module.css'
-import UserItem from '@entities/UserData/ui/UserItem'
 
 const { Header, Sider } = Layout
 
@@ -37,13 +38,19 @@ const PageLayout: React.FC<PropsWithChildren> = ({ children }) => {
             if (resLD.meta.requestStatus === 'rejected') {
                 return doTheLogout()
             }
-            const loginData = resLD.payload as LoginMyData;
-            
+            const loginData = resLD.payload as LoginMyData
+
             if (!Object.keys(myUserData).length) {
                 await dispatch(getUser({ uid: loginData.sub, setAsMyUser: true }))
             }
         }
+
         checkIfLoggedIn()
+
+        // На случай открытия какой-то из страниц в обход главной панели
+        if (allUsersData.length <= 0) {
+            dispatch(getUsers())
+        }
     }, [])
 
     return (
@@ -51,8 +58,10 @@ const PageLayout: React.FC<PropsWithChildren> = ({ children }) => {
             <Header style={{ backgroundColor: 'transparent' }}>
                 <Link to="/" className={styles.logo}>Панель управления пользователями</Link>
                 <span>
-                    { myUserData.fullName ? myUserData.fullName : myUserData.name }
-                    &nbsp; &nbsp;
+                    <Typography.Text strong>
+                        { myUserData.fullName ? myUserData.fullName : myUserData.name }&nbsp; &nbsp;
+                    </Typography.Text>
+
                     <Button danger className={styles.logout} icon={<LogoutOutlined />} onClick={async () => doTheLogout()}>
                         Выйти
                     </Button>
@@ -73,7 +82,7 @@ const PageLayout: React.FC<PropsWithChildren> = ({ children }) => {
                         </Typography.Text>
 
                         {allUsersData.map((ud: UserResData) => (
-                            <UserItem ud={ud} onClicked={() => navigate(`/user/edit?uid=${ud.id}`)} />
+                            <UserItem ud={ud} onClicked={() => navigate(`/user/edit?uid=${ud.id}`)} key={ud.id} />
                         )).reverse()}
                     </div>
 

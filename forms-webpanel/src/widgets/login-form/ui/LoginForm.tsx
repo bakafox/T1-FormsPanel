@@ -2,14 +2,12 @@ import type { LoginData } from '@entities/LoginData/model/types'
 import { LockOutlined, MailOutlined } from '@ant-design/icons'
 import { Button, Form, Input } from 'antd'
 import React from 'react'
-import styles from './LoginForm.module.css'
 
 interface Props {
-    getLoginData: LoginData,
     setLoginData: (ld: LoginData) => void,
 }
 
-const LoginForm: React.FC<Props> = ({ getLoginData, setLoginData }) => {
+const LoginForm: React.FC<Props> = ({ setLoginData }) => {
     return (
         <Form
             name="loginForm"

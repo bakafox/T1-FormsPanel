@@ -25,16 +25,20 @@ const getUsers = createAsyncThunk(
 const getUser = createAsyncThunk(
     'users/getUser',
     async (
-        { uid, setAsMyUser = false }: { uid: UserResData['id'], setAsMyUser: boolean },
+        { uid, setAsMyUser = false }: { uid: UserResData['id'], setAsMyUser?: boolean },
     ): Promise<UserResData> => {
-        const json = await fetch(
+        const res = await fetch(
             `${API_ROOT}/${uid}`,
         )
 
-        if (!json.ok) { throw new Error(json.toString()) }
+        if (!setAsMyUser) { setAsMyUser = false }
 
-        const data: UserResData = await json.json()
+        if (!res.ok) {
+            const data = await res.json()
+            throw new Error(data.message)
+        }
 
+        const data: UserResData = await res.json()
         return data
     },
 )
@@ -44,7 +48,7 @@ const createUser = createAsyncThunk(
     async (
         { ud }: { ud: UserData },
     ): Promise<UserCreatedData> => {
-        const json = await fetch(
+        const res = await fetch(
             API_ROOT,
             {
                 method: 'POST',
@@ -53,9 +57,12 @@ const createUser = createAsyncThunk(
             },
         )
 
-        if (!json.ok) { throw new Error(json.toString()) }
+        if (!res.ok) {
+            const data = await res.json()
+            throw new Error(data.message)
+        }
 
-        const data: UserCreatedData = await json.json()
+        const data: UserCreatedData = await res.json()
         return data
     },
 )
@@ -63,9 +70,9 @@ const createUser = createAsyncThunk(
 const updateUser = createAsyncThunk(
     'users/updateUser',
     async (
-        { ud, uid }: { ud: UserData, uid: UserResData['id'] },
+        { uid, ud  }: { uid: UserResData['id'], ud: UserData },
     ): Promise<UserResData> => {
-        const json = await fetch(
+        const res = await fetch(
             `${API_ROOT}/${uid}`,
             {
                 method: 'PATCH',
@@ -74,9 +81,12 @@ const updateUser = createAsyncThunk(
             },
         )
 
-        if (!json.ok) { throw new Error(json.toString()) }
+        if (!res.ok) {
+            const data = await res.json()
+            throw new Error(data.message)
+        }
 
-        const data: UserResData = await json.json()
+        const data: UserResData = await res.json()
         return data
     },
 )
@@ -86,14 +96,17 @@ const deleteUser = createAsyncThunk(
     async (
         { uid }: { uid: UserResData['id'] },
     ): Promise<void> => {
-        const json = await fetch(
+        const res = await fetch(
             `${API_ROOT}/${uid}`,
             {
                 method: 'DELETE',
             },
         )
 
-        if (!json.ok) { throw new Error(json.toString()) }
+        if (!res.ok) {
+            const data = await res.json()
+            throw new Error(data.message)
+        }
     },
 )
 
@@ -101,11 +114,11 @@ const deleteUser = createAsyncThunk(
 // можут иметь доступ к действия, произошедшим не внутри слайса
 interface UsersState {
     allUsers: UserResData[],
-    myUser: UserResData
+    myUser: UserResData,
 }
 const usersInitialState: UsersState = {
     allUsers: [],
-    myUser: {} as UserResData
+    myUser: {} as UserResData,
 }
 
 const usersSlice = createSlice({
@@ -131,14 +144,14 @@ const usersSlice = createSlice({
             })
             .addCase(updateUser.fulfilled, (state, action) => {
                 state.allUsers = state.allUsers.map(
-                    (user) => user.id === action.payload.id
+                    (ud: UserResData) => ud.id === action.payload.id
                         ? action.payload
-                        : user
+                        : ud,
                 )
             })
             .addCase(deleteUser.fulfilled, (state, action) => {
                 state.allUsers = state.allUsers.filter(
-                    (user) => user.id !== action.meta.arg.uid
+                    (ud: UserResData) => ud.id !== action.meta.arg.uid,
                 )
             })
     },
@@ -151,8 +164,8 @@ const usersSlice = createSlice({
 export {
     createUser,
     deleteUser,
-    getUsers,
     getUser,
+    getUsers,
     updateUser,
 }
 

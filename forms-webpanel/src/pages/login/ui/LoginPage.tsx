@@ -1,13 +1,13 @@
 import type { AppDispatch } from '@app/store'
-import { login } from '@entities/LoginData/model/slice'
 import type { LoginData } from '@entities/LoginData/model/types'
+import { login } from '@entities/LoginData/model/slice'
 import styles from '@shared/ui/FormPage.module.css'
 import LoginForm from '@widgets/login-form/ui/LoginForm'
 
 import { Card, Typography } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { redirect, useNavigate } from 'react-router'
+import { useNavigate } from 'react-router'
 
 const LoginPage: React.FC = () => {
     const navigate = useNavigate()
@@ -16,9 +16,14 @@ const LoginPage: React.FC = () => {
     const [getLoginData, setLoginData] = useState<LoginData>({} as LoginData)
 
     useEffect(() => {
-        async function doTheLogin() {
+        async function doTheLogin(): Promise<void> {
             const res = await dispatch(login({ ld: getLoginData }))
-            if (res.meta.requestStatus !== 'rejected') { navigate('/') }
+            if (res.meta.requestStatus !== 'rejected') {
+                navigate('/')
+            }
+            else {
+                alert('Неправильный логин или пароль')
+            }
         }
 
         if (getLoginData.email && getLoginData.password) {
@@ -33,7 +38,7 @@ const LoginPage: React.FC = () => {
                     <Typography.Title level={1}>Вход в систему</Typography.Title>
                 </header>
 
-                <LoginForm getLoginData={getLoginData} setLoginData={setLoginData} />
+                <LoginForm setLoginData={setLoginData} />
             </Card>
         </main>
     )

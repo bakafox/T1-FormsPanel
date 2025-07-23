@@ -1,4 +1,4 @@
-import type { LoginData, LoginResData, LoginMyData } from './types'
+import type { LoginData, LoginMyData, LoginResData } from './types'
 
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
