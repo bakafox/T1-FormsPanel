@@ -155,8 +155,17 @@ const UserForm: React.FC<Props> = ({ getUserResData, setUserData, setStatus }) =
                             >
                                 <Input.Password variant="filled" prefix={<LockOutlined />} placeholder=" Подтверждение пароля" />
                             </Form.Item>
-
-                            <Form.Item name="userAgreement">
+                            <Form.Item
+                                name="userAgreement"
+                                valuePropName="checked"
+                                rules={[
+                                    () => ({
+                                        validator: (_, value) => (
+                                            value ? Promise.resolve() : Promise.reject(new Error('Вы не можете не согласиться…'))
+                                        ),
+                                    }),
+                                ]}
+                            >
                                 <Checkbox>
                                     Подписаться на рассылку «Комсомольской правды» по голубиной почте
                                 </Checkbox>

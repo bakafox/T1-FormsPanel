@@ -13,6 +13,7 @@ const getUsers = createAsyncThunk(
     async (): Promise<UserResData[]> => {
         const json = await fetch(
             API_ROOT,
+            { credentials: 'include', },
         )
 
         if (!json.ok) { throw new Error(json.toString()) }
@@ -29,6 +30,7 @@ const getUser = createAsyncThunk(
     ): Promise<UserResData> => {
         const res = await fetch(
             `${API_ROOT}/${uid}`,
+            { credentials: 'include', },
         )
 
         if (!setAsMyUser) { setAsMyUser = false }
@@ -54,6 +56,7 @@ const createUser = createAsyncThunk(
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(ud),
+                credentials: 'include',
             },
         )
 
@@ -71,13 +74,14 @@ const updateUser = createAsyncThunk(
     'users/updateUser',
     async (
         { uid, ud  }: { uid: UserResData['id'], ud: UserData },
-    ): Promise<UserResData> => {
+    ): Promise<void> => {
         const res = await fetch(
             `${API_ROOT}/${uid}`,
             {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(ud),
+                credentials: 'include',
             },
         )
 
@@ -86,8 +90,7 @@ const updateUser = createAsyncThunk(
             throw new Error(data.message)
         }
 
-        const data: UserResData = await res.json()
-        return data
+        return
     },
 )
 
@@ -100,6 +103,7 @@ const deleteUser = createAsyncThunk(
             `${API_ROOT}/${uid}`,
             {
                 method: 'DELETE',
+                credentials: 'include',
             },
         )
 
@@ -148,8 +152,8 @@ const usersSlice = createSlice({
             })
             .addCase(updateUser.fulfilled, (state, action) => {
                 state.allUsers = state.allUsers.map(
-                    (ud: UserResData) => ud.id === action.payload.id
-                        ? action.payload
+                    (ud: UserResData) => ud.id === action.meta.arg.uid
+                        ? action.meta.arg.ud
                         : ud,
                 )
             })

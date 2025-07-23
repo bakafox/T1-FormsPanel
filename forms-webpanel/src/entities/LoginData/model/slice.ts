@@ -19,6 +19,7 @@ const login = createAsyncThunk(
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(ld),
+                credentials: 'include',
             },
         )
 
@@ -36,6 +37,7 @@ const logout = createAsyncThunk(
             `${API_ROOT}/logout`,
             {
                 method: 'POST',
+                credentials: 'include',
             },
         )
 
@@ -51,6 +53,7 @@ const getMyData = createAsyncThunk(
     async (): Promise<LoginMyData> => {
         const json = await fetch(
             `${API_ROOT}/me`,
+            { credentials: 'include', }
         )
 
         if (!json.ok) { throw new Error(json.toString()) }
